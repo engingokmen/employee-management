@@ -22,4 +22,8 @@ export default {
       },
     }),
   ],
+  basePath: '/',
+  rootDir: './dev',
+  open: true,
+  appIndex: './dev/index.html',
 };
