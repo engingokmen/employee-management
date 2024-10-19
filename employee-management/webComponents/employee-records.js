@@ -1,8 +1,10 @@
 import {LitElement, html, css} from 'lit';
-import {employees} from '../mockData/mockData';
 import {camelCaseToTitle} from '../utils';
+import {LoadingEmptyMixin} from '../mixins/LoadingEmptyMixin';
+import {fetchEmployees} from '../store';
+import {AsyncDataController} from '../controllers/AsyncDataController';
 
-export class EmployeeRecords extends LitElement {
+export class EmployeeRecords extends LoadingEmptyMixin(LitElement) {
   static get styles() {
     return css`
       table {
@@ -25,14 +27,18 @@ export class EmployeeRecords extends LitElement {
 
   constructor() {
     super();
-    this.employees = employees;
+    this.asyncData = new AsyncDataController(this, fetchEmployees);
+  }
+
+  get isEmptyData() {
+    return this.asyncData.data.length === 0;
   }
 
   renderHeader() {
     return html`
       <thead>
         <tr>
-          ${Object.keys(this.employees[0]).map(
+          ${Object.keys(this.asyncData.data[0]).map(
             (key) => html`<th>${camelCaseToTitle(key)}</th>`
           )}
         </tr>
@@ -43,7 +49,7 @@ export class EmployeeRecords extends LitElement {
   renderBody() {
     return html`
       <tbody>
-        ${this.employees.map(
+        ${this.asyncData.data.map(
           (employee) =>
             html`
               <tr>
@@ -57,12 +63,20 @@ export class EmployeeRecords extends LitElement {
     `;
   }
 
-  render() {
+  renderEmployeeRecords() {
     return html`
       <table>
         ${this.renderHeader()} ${this.renderBody()}
       </table>
     `;
+  }
+
+  render() {
+    return this.renderWithLoadingEmpty(
+      this.asyncData.isLoading,
+      this.asyncData.isEmptyData,
+      () => this.renderEmployeeRecords()
+    );
   }
 }
 
