@@ -4,7 +4,7 @@ export class AsyncDataController {
   constructor(host, asyncFunction) {
     this.host = host;
     this.host.addController(this);
-    this.data = [];
+    this.data = store.getState().data;
     this.isLoading = true;
 
     store.subscribe(() => this.handleStateChange(store.getState()));

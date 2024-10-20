@@ -4,38 +4,57 @@ import {
   compose,
 } from 'redux';
 import {thunk} from 'redux-thunk';
-import {employees} from '../mockData/mockData';
 
 const composedEnhancer = compose(applyMiddleware(thunk));
-export const store = createStore(employeeReducer, composedEnhancer);
 
-function employeeReducer(
+// iniitializes data from local storage
+const data = localStorage.getItem('employees');
+let initialData = data ? JSON.parse(data) : [];
+const employeeReducer = (
   state = {
-    data: [],
+    data: initialData,
     loading: false,
   },
   action
-) {
+) => {
   switch (action.type) {
     case 'loading':
-      return {data: [], loading: true};
+      return {data: state.data, loading: true};
     case 'loaded':
       return {data: action.payload, loading: false};
     case 'addedEmployee':
       return {data: [...state.data, action.payload], loading: false};
+    case 'deletedEmployee':
+      return {
+        data: state.data.filter((employee) => employee !== action.payload),
+        loading: false,
+      };
     default:
       return state;
   }
-}
+};
+
+export const store = createStore(employeeReducer, composedEnhancer);
+
+// ACTION CREATORS
 
 export const fetchEmployees = (dispatch) => {
   dispatch({type: 'loading'});
   // TODO replace with local storage fetch
-  setTimeout(() => {
-    dispatch({type: 'loaded', payload: employees});
-  }, 1000);
+  const data = localStorage.getItem('employees');
+  let employees = [];
+  if (data) {
+    employees = JSON.parse(data);
+  }
+  dispatch({type: 'loaded', payload: employees});
 };
 
 export const addEmployee = (employee) => (dispatch) => {
   dispatch({type: 'addedEmployee', payload: employee});
+  localStorage.setItem('employees', JSON.stringify(store.getState().data));
+};
+
+export const deleteEmployee = (employee) => (dispatch) => {
+  dispatch({type: 'deletedEmployee', payload: employee});
+  localStorage.setItem('employees', JSON.stringify(store.getState().data));
 };

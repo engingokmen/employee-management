@@ -60,7 +60,7 @@ export class AddEditEmployee extends LitElement {
     if (!result.success) {
       this.errors = result.error.errors;
     } else {
-      addEmployee(result.data);
+      store.dispatch(addEmployee(result.data));
       console.log(store.getState());
     }
   }
