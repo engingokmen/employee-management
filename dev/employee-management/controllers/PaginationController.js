@@ -7,6 +7,12 @@ export class PaginationController {
     this.currentPage = 1;
   }
 
+  changeItems(items) {
+    this.items = items;
+    this.currentPage = 1;
+    this.host.requestUpdate();
+  }
+
   get paginatedItems() {
     const start = (this.currentPage - 1) * this.rowsPerPage;
     const end = start + this.rowsPerPage;
@@ -19,7 +25,6 @@ export class PaginationController {
 
   changePage(page) {
     if (page > 0 && page <= this.totalPages) {
-      console.log('page', page);
       this.currentPage = page;
       this.host.requestUpdate();
     }

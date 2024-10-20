@@ -4,39 +4,19 @@ import {
   compose,
 } from 'redux';
 import {thunk} from 'redux-thunk';
+import {Employee} from '../class/Employee';
+import {employee, search} from './reducers';
 
 const composedEnhancer = compose(applyMiddleware(thunk));
 
-// iniitializes data from local storage
-const data = localStorage.getItem('employees');
-let initialData = data ? JSON.parse(data) : [];
-const employeeReducer = (
-  state = {
-    data: initialData,
-    loading: false,
-  },
-  action
-) => {
-  switch (action.type) {
-    case 'loading':
-      return {data: state.data, loading: true};
-    case 'loaded':
-      return {data: action.payload, loading: false};
-    case 'addedEmployee':
-      return {data: [...state.data, action.payload], loading: false};
-    case 'deletedEmployee':
+function rootReducer(state = {}, action) {
       return {
-        data: state.data.filter(
-          (employee) => employee.email !== action.payload
-        ),
-        loading: false,
-      };
-    default:
-      return state;
+    employee: employee(state.employee, action),
+    search: search(state.search, action),
+  };
   }
-};
 
-export const store = createStore(employeeReducer, composedEnhancer);
+export const store = createStore(rootReducer, composedEnhancer);
 
 // ACTION CREATORS
 

@@ -4,7 +4,7 @@ export class AsyncDataController {
   constructor(host, asyncFunction) {
     this.host = host;
     this.host.addController(this);
-    this.data = store.getState().data;
+    this.data = store.getState().employee.data;
     this.isLoading = true;
 
     store.subscribe(() => this.handleStateChange(store.getState()));
@@ -12,7 +12,13 @@ export class AsyncDataController {
   }
 
   handleStateChange(state) {
-    this.data = [...state.data];
+    this.data = [
+      ...state.employee.data.filter((employee) => {
+        return employee.firstName
+          .toLowerCase()
+          .includes(state.search.toLowerCase());
+      }),
+    ];
     this.isLoading = state.loading;
     this.host.requestUpdate();
   }

@@ -28,15 +28,20 @@ export class EmployeeRecords extends LoadingEmptyMixin(LitElement) {
 
   constructor() {
     super();
-    this.asyncData = new AsyncDataController(this, fetchEmployees);
+    this.employees = new AsyncDataController(this, fetchEmployees);
     this.paginationController = new PaginationController(
       this,
-      this.asyncData.data
+      this.employees.data
     );
   }
 
   get isEmptyData() {
-    return this.asyncData.data.length === 0;
+    return this.employees.data.length === 0;
+  }
+
+  update() {
+    this.paginationController.changeItems(this.employees.data);
+    super.update();
   }
 
   handlePageChanged(event) {
@@ -47,7 +52,7 @@ export class EmployeeRecords extends LoadingEmptyMixin(LitElement) {
     return html`
       <thead>
         <tr>
-          ${Object.keys(this.asyncData.data[0]).map(
+          ${Object.keys(this.employees.data[0]).map(
             (key) => html`<th>${camelCaseToTitle(key)}</th>`
           )}
         </tr>
@@ -77,6 +82,7 @@ export class EmployeeRecords extends LoadingEmptyMixin(LitElement) {
 
   renderEmployeeRecords() {
     return html`
+      <search-input></search-input>
       <table>
         ${this.renderHeader()} ${this.renderBody()}
       </table>
@@ -90,8 +96,8 @@ export class EmployeeRecords extends LoadingEmptyMixin(LitElement) {
 
   render() {
     return this.renderWithLoadingEmpty(
-      this.asyncData.isLoading,
-      this.asyncData.isEmptyData,
+      this.employees.isLoading,
+      this.employees.isEmptyData,
       () => this.renderEmployeeRecords()
     );
   }
