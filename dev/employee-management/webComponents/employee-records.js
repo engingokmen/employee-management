@@ -3,6 +3,7 @@ import {camelCaseToTitle} from '../utils';
 import {LoadingEmptyMixin} from '../mixins/LoadingEmptyMixin';
 import {fetchEmployees} from '../store';
 import {AsyncDataController} from '../controllers/AsyncDataController';
+import {PaginationController} from '../controllers/PaginationController';
 
 export class EmployeeRecords extends LoadingEmptyMixin(LitElement) {
   static get styles() {
@@ -21,17 +22,25 @@ export class EmployeeRecords extends LoadingEmptyMixin(LitElement) {
 
   static get properties() {
     return {
-      employees: {type: Array},
+      employees: {attribute: false},
     };
   }
 
   constructor() {
     super();
     this.asyncData = new AsyncDataController(this, fetchEmployees);
+    this.paginationController = new PaginationController(
+      this,
+      this.asyncData.data
+    );
   }
 
   get isEmptyData() {
     return this.asyncData.data.length === 0;
+  }
+
+  handlePageChanged(event) {
+    this.paginationController.changePage(event.detail.page);
   }
 
   renderHeader() {
@@ -49,7 +58,7 @@ export class EmployeeRecords extends LoadingEmptyMixin(LitElement) {
   renderBody() {
     return html`
       <tbody>
-        ${this.asyncData.data.map(
+        ${this.paginationController.paginatedItems.map(
           (employee) =>
             html`
               <tr>
@@ -71,6 +80,11 @@ export class EmployeeRecords extends LoadingEmptyMixin(LitElement) {
       <table>
         ${this.renderHeader()} ${this.renderBody()}
       </table>
+      <pagination-c
+        currentPage="${this.paginationController.currentPage}"
+        totalPages="${this.paginationController.totalPages}"
+        @page-changed="${this.handlePageChanged}"
+      ></pagination-c>
     `;
   }
 
