@@ -26,7 +26,9 @@ const employeeReducer = (
       return {data: [...state.data, action.payload], loading: false};
     case 'deletedEmployee':
       return {
-        data: state.data.filter((employee) => employee !== action.payload),
+        data: state.data.filter(
+          (employee) => employee.email !== action.payload
+        ),
         loading: false,
       };
     default:
@@ -54,7 +56,7 @@ export const addEmployee = (employee) => (dispatch) => {
   localStorage.setItem('employees', JSON.stringify(store.getState().data));
 };
 
-export const deleteEmployee = (employee) => (dispatch) => {
-  dispatch({type: 'deletedEmployee', payload: employee});
+export const deleteEmployee = (id) => (dispatch) => {
+  dispatch({type: 'deletedEmployee', payload: id});
   localStorage.setItem('employees', JSON.stringify(store.getState().data));
 };

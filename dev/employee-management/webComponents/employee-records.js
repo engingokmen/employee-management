@@ -56,6 +56,9 @@ export class EmployeeRecords extends LoadingEmptyMixin(LitElement) {
                 ${Object.values(employee).map(
                   (value) => html`<td>${value}</td>`
                 )}
+                <td>
+                  <delete-employee id="${employee.email}"></delete-employee>
+                </td>
               </tr>
             `
         )}
