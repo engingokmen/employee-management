@@ -21,6 +21,8 @@ function employeeReducer(
       return {data: [], loading: true};
     case 'loaded':
       return {data: action.payload, loading: false};
+    case 'addedEmployee':
+      return {data: [...state.data, action.payload], loading: false};
     default:
       return state;
   }
@@ -32,4 +34,8 @@ export const fetchEmployees = (dispatch) => {
   setTimeout(() => {
     dispatch({type: 'loaded', payload: employees});
   }, 1000);
+};
+
+export const addEmployee = (employee) => (dispatch) => {
+  dispatch({type: 'addedEmployee', payload: employee});
 };
