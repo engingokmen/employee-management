@@ -21,7 +21,16 @@ export class AddEditEmployee extends LitElement {
 
   constructor() {
     super();
-    this.employee = new Employee();
+    this.employee = new Employee(
+      'name',
+      'lastname',
+      new Date().toISOString().split('T')[0],
+      new Date().toISOString().split('T')[0],
+      '1231212',
+      'name@lastname.com',
+      'dep',
+      'pos'
+    );
     this.schema = validationSchemaEmployee;
     this.errors = [];
   }
@@ -61,7 +70,6 @@ export class AddEditEmployee extends LitElement {
       this.errors = result.error.errors;
     } else {
       store.dispatch(addEmployee(result.data));
-      console.log(store.getState());
     }
   }
 

@@ -1,6 +1,9 @@
 // iniitializes data from local storage
 const data = localStorage.getItem('employees');
-let initialData = data ? JSON.parse(data) : [];
+let initialData = [];
+if (data && data !== 'undefined') {
+  initialData = JSON.parse(data);
+}
 
 export const employee = (
   state = {
