@@ -12,18 +12,7 @@ export class AsyncDataController {
   }
 
   handleStateChange(state) {
-    this.data = [
-      ...state.employee.data.filter((employee) => {
-        return employee.firstName
-          .toLowerCase()
-          .includes(state.search.toLowerCase());
-      }),
-    ];
-    this.isLoading = state.loading;
+    this.data = [...state.employee.data];
     this.host.requestUpdate();
-  }
-
-  get isEmptyData() {
-    return this.data.length === 0;
   }
 }

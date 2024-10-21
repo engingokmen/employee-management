@@ -1,3 +1,5 @@
+import {store} from '../store';
+
 export class PaginationController {
   constructor(host, items = [], rowsPerPage = 5) {
     this.host = host;
@@ -5,10 +7,17 @@ export class PaginationController {
     this.items = items;
     this.rowsPerPage = rowsPerPage;
     this.currentPage = 1;
+
+    store.subscribe(() => this.handleStateChange(store.getState().search));
   }
 
-  changeItems(items) {
-    this.items = items;
+  handleStateChange(searchTerm) {
+    const search = searchTerm.toLowerCase();
+    this.items = store.getState().employee.data.filter((employee) => {
+      const joined = Object.values(employee).join(' ').toLowerCase();
+      return joined.includes(search);
+    });
+
     this.currentPage = 1;
     this.host.requestUpdate();
   }
