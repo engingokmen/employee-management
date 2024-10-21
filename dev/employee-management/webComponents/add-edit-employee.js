@@ -63,8 +63,16 @@ export class AddEditEmployee extends LitElement {
     event.preventDefault();
     const formData = new FormData(event.target);
     const employee = Object.fromEntries(formData);
-    // TODO - Add employee to the list of employees
-    const result = await this.schema.safeParseAsync(employee);
+
+    // uniqueness of a record
+    const extendedSchema = this.schema.extend({
+      email: this.schema.shape.email.refine((value) => {
+        const employees = store.getState().employee.data;
+        return !employees.some((employee) => employee.email === value);
+      }, 'Email already in use'),
+    });
+
+    const result = await extendedSchema.safeParseAsync(employee);
 
     if (!result.success) {
       this.errors = result.error.errors;
