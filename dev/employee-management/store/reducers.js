@@ -7,7 +7,7 @@ if (data && data !== 'undefined') {
 
 export const employee = (
   state = {
-    data: initialData,
+    data: [],
     loading: false,
   },
   action

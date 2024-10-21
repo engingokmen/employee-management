@@ -1,4 +1,5 @@
 import {LitElement, html, css} from 'lit';
+import {classMap} from 'lit/directives/class-map.js';
 import {camelCaseToTitle} from '../utils';
 import {LoadingEmptyMixin} from '../mixins/LoadingEmptyMixin';
 import {fetchEmployees} from '../store';
@@ -8,14 +9,35 @@ import {PaginationController} from '../controllers/PaginationController';
 export class EmployeeRecords extends LoadingEmptyMixin(LitElement) {
   static get styles() {
     return css`
-      table {
-        border-collapse: collapse;
+      .table {
+        & .header,
+        .body {
+          display: grid;
+          grid-template-columns: repeat(9, minmax(50px, 1fr));
+          grid-template-rows: min-content;
+          border-bottom: 1px solid black;
+
+          &:nth-child(even) {
+            background-color: #f2f2f2;
+          }
+
+          & .cell {
+            padding: 5px;
+            word-break: break-all;
+          }
+        }
       }
 
-      th,
-      td {
-        border: 1px solid black;
-        padding: 8px;
+      .list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+
+        & .header,
+        .body {
+          display: inline-flex;
+          gap: 6px;
+        }
       }
     `;
   }
@@ -23,17 +45,28 @@ export class EmployeeRecords extends LoadingEmptyMixin(LitElement) {
   static get properties() {
     return {
       employees: {attribute: false},
+      display: {attribute: false},
     };
   }
 
   constructor() {
     super();
+    this.display = false;
     this.employees = new AsyncDataController(this, fetchEmployees).data;
     this.paginationController = new PaginationController(this, this.employees);
   }
 
   get isEmptyData() {
     return this.paginationController.paginatedItems.length === 0;
+  }
+
+  handleDisplay() {
+    this.display = !this.display;
+  }
+
+  handleEmployeeClick(event) {
+    const email = event.currentTarget.querySelector('td').textContent;
+    // TODO: Implement employee edit page
   }
 
   handlePageChanged(event) {
@@ -43,41 +76,43 @@ export class EmployeeRecords extends LoadingEmptyMixin(LitElement) {
   renderHeader() {
     this.paginationController.paginatedItems;
     return html`
-      <thead>
-        <tr>
-          ${Object.keys(this.paginationController.paginatedItems[0]).map(
-            (key) => html`<th>${camelCaseToTitle(key)}</th>`
-          )}
-        </tr>
-      </thead>
+      <div class="header">
+        ${Object.keys(this.paginationController.paginatedItems[0]).map(
+          (key) =>
+            html`<div class="cell cell-header">${camelCaseToTitle(key)}</div>`
+        )}
+      </div>
     `;
   }
 
   renderBody() {
     return html`
-      <tbody>
         ${this.paginationController.paginatedItems.map(
           (employee) =>
             html`
-              <tr>
+              <div class="body">
                 ${Object.values(employee).map(
-                  (value) => html`<td>${value}</td>`
+                  (value) => html`<div class="cell">${value}</div>`
                 )}
-                <td>
+                <div class="cell delete">
                   <delete-employee id="${employee.email}"></delete-employee>
-                </td>
-              </tr>
+                </div>
+              </div>
             `
         )}
-      </tbody>
+      </div>
     `;
   }
 
   renderEmployeeRecords() {
+    const classes = {
+      list: this.display,
+      table: !this.display,
+    };
     return html`
-      <table>
+      <div class=${classMap(classes)}>
         ${this.renderHeader()} ${this.renderBody()}
-      </table>
+      </div>
       <pagination-c
         currentPage="${this.paginationController.currentPage}"
         totalPages="${this.paginationController.totalPages}"
@@ -87,7 +122,11 @@ export class EmployeeRecords extends LoadingEmptyMixin(LitElement) {
   }
 
   render() {
-    return html`<search-input></search-input> ${this.renderWithLoadingEmpty(
+    return html`<search-input></search-input>
+      <button @click=${this.handleDisplay}>
+        Display ${this.display ? 'table' : 'list'}
+      </button>
+      ${this.renderWithLoadingEmpty(
         this.employees.isLoading,
         this.isEmptyData,
         () => this.renderEmployeeRecords()
