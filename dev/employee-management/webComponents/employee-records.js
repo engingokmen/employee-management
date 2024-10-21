@@ -5,6 +5,7 @@ import {LoadingEmptyMixin} from '../mixins/LoadingEmptyMixin';
 import {fetchEmployees} from '../store';
 import {AsyncDataController} from '../controllers/AsyncDataController';
 import {PaginationController} from '../controllers/PaginationController';
+import {Router} from '@vaadin/router';
 
 export class EmployeeRecords extends LoadingEmptyMixin(LitElement) {
   static get styles() {
@@ -19,6 +20,10 @@ export class EmployeeRecords extends LoadingEmptyMixin(LitElement) {
 
           &:nth-child(even) {
             background-color: #f2f2f2;
+          }
+
+          &:hover {
+            background-color: #dde8fc;
           }
 
           & .cell {
@@ -64,9 +69,13 @@ export class EmployeeRecords extends LoadingEmptyMixin(LitElement) {
     this.display = !this.display;
   }
 
-  handleEmployeeClick(event) {
-    const email = event.currentTarget.querySelector('td').textContent;
-    // TODO: Implement employee edit page
+  handleEmployeeClick(e) {
+    const clickedEmployee = e.target.closest('.body');
+    if (clickedEmployee) {
+      const employeeEmail = clickedEmployee.getAttribute('data-email');
+      // navigate to edit employee page
+      Router.go(`/add-edit-employee/${employeeEmail}`);
+    }
   }
 
   handlePageChanged(event) {
@@ -87,10 +96,11 @@ export class EmployeeRecords extends LoadingEmptyMixin(LitElement) {
 
   renderBody() {
     return html`
+      <div @click=${this.handleEmployeeClick}>
         ${this.paginationController.paginatedItems.map(
           (employee) =>
             html`
-              <div class="body">
+              <div data-email=${employee.email} class="body">
                 ${Object.values(employee).map(
                   (value) => html`<div class="cell">${value}</div>`
                 )}
@@ -122,7 +132,8 @@ export class EmployeeRecords extends LoadingEmptyMixin(LitElement) {
   }
 
   render() {
-    return html`<search-input></search-input>
+    return html` <h2>Employees</h2>
+      <search-input></search-input>
       <button @click=${this.handleDisplay}>
         Display ${this.display ? 'table' : 'list'}
       </button>

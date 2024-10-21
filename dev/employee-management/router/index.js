@@ -8,7 +8,11 @@ router.setRoutes([
     component: 'employee-management',
     children: [
       {path: '/', component: 'employee-records'},
-      {path: '/add-edit-employee', component: 'add-edit-employee'},
+      {
+        path: 'add-edit-employee',
+        component: 'add-edit-employee',
+      },
+      {path: 'add-edit-employee/:email', component: 'add-edit-employee'},
     ],
   },
 ]);

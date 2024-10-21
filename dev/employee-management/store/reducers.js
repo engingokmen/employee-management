@@ -19,6 +19,13 @@ export const employee = (
       return {data: action.payload, loading: false};
     case 'addedEmployee':
       return {data: [...state.data, action.payload], loading: false};
+    case 'updatedEmployee':
+      return {
+        data: state.data.map((employee) =>
+          employee.email === action.payload.email ? action.payload : employee
+        ),
+        loading: false,
+      };
     case 'deletedEmployee':
       return {
         data: state.data.filter(

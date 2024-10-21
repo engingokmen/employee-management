@@ -21,7 +21,7 @@ export class DeleteEmployee extends LitElement {
   }
 
   async onclick(event) {
-    event.preventDefault();
+    event.stopPropagation();
     store.dispatch(deleteEmployee(this.id));
   }
 

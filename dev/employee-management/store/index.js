@@ -38,6 +38,14 @@ export const addEmployee = (employee) => (dispatch) => {
   );
 };
 
+export const updateEmployee = (employee) => (dispatch) => {
+  dispatch({type: 'updatedEmployee', payload: employee});
+  localStorage.setItem(
+    'employees',
+    JSON.stringify(store.getState().employee.data)
+  );
+};
+
 export const deleteEmployee = (id) => (dispatch) => {
   dispatch({type: 'deletedEmployee', payload: id});
   localStorage.setItem(
