@@ -24,6 +24,7 @@ export class AddEditEmployee extends LitElement {
       employee: {type: Object},
       errors: {type: Array},
       location: {type: Object},
+      showDialog: {type: Boolean},
     };
   }
 
@@ -34,6 +35,8 @@ export class AddEditEmployee extends LitElement {
     this.errors = [];
     this.location = router.location;
     this.isEditPage = !!this.location.params.email;
+    this.showDialog = false;
+    this.result = null;
   }
 
   connectedCallback() {
@@ -100,16 +103,24 @@ export class AddEditEmployee extends LitElement {
       });
     }
 
-    const result = await extendedSchema.safeParseAsync(employee);
+    this.result = await extendedSchema.safeParseAsync(employee);
 
-    if (!result.success) {
-      this.errors = result.error.errors;
+    if (!this.result.success) {
+      this.errors = this.result.error.errors;
     } else {
-      this.isEditPage
-        ? store.dispatch(updateEmployee(result.data))
-        : store.dispatch(addEmployee(result.data));
-      Router.go('/');
+      this.showDialog = true;
     }
+  }
+
+  confirmDialog() {
+    this.isEditPage
+      ? store.dispatch(updateEmployee(this.result.data))
+      : store.dispatch(addEmployee(this.result.data));
+    Router.go('/');
+  }
+
+  cancelDialog() {
+    this.showDialog = false;
   }
 
   render() {
@@ -119,6 +130,12 @@ export class AddEditEmployee extends LitElement {
         <form @submit="${this.onsubmit}">
           ${this.renderInputs()}
           <input type="submit" value="Submit" />
+          <are-you-sure
+            .show=${this.showDialog}
+            @submit=${this.confirmDialog}
+            @cancel=${this.cancelDialog}
+            action="${this.isEditPage ? 'edit' : 'add'}"
+          ></are-you-sure>
         </form>
         <ul>
           ${this.errors.map(

@@ -90,7 +90,7 @@ export class EmployeeRecords extends LoadingEmptyMixin(LitElement) {
   }
 
   handleEmployeeClick(e) {
-    const clickedEmployee = e.target.closest('.body');
+    const clickedEmployee = e.target.closest('.row');
     if (clickedEmployee) {
       const employeeEmail = clickedEmployee.getAttribute('data-email');
       // navigate to edit employee page
