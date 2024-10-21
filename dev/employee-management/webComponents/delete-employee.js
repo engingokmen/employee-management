@@ -1,13 +1,17 @@
 import {LitElement, html, css} from 'lit';
 import {deleteEmployee, store} from '../store';
+import {buttonStyles} from '../styles/button-style';
 
 export class DeleteEmployee extends LitElement {
   static get styles() {
-    return css`
-      .red {
-        color: crimson;
-      }
-    `;
+    return [
+      buttonStyles,
+      css`
+        .red {
+          color: crimson;
+        }
+      `,
+    ];
   }
 
   static get properties() {
@@ -26,7 +30,9 @@ export class DeleteEmployee extends LitElement {
   }
 
   render() {
-    return html` <button @click="${this.onclick}">Delete</button> `;
+    return html`
+      <button @click="${this.onclick}" class="warning">Delete</button>
+    `;
   }
 }
 

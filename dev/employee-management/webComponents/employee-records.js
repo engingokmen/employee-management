@@ -6,45 +6,65 @@ import {fetchEmployees} from '../store';
 import {AsyncDataController} from '../controllers/AsyncDataController';
 import {PaginationController} from '../controllers/PaginationController';
 import {Router} from '@vaadin/router';
+import {buttonStyles} from '../styles/button-style';
 
 export class EmployeeRecords extends LoadingEmptyMixin(LitElement) {
   static get styles() {
-    return css`
-      .table {
-        & .header,
-        .body {
-          display: grid;
-          grid-template-columns: repeat(9, minmax(50px, 1fr));
-          grid-template-rows: min-content;
-          border-bottom: 1px solid black;
+    return [
+      buttonStyles,
+      css`
+        .wrapper {
+          margin: 20px 0;
 
-          &:nth-child(even) {
-            background-color: #f2f2f2;
+          & .header {
+            font-weight: 600;
+            background-color: var(--lighterBlue);
           }
 
-          &:hover {
-            background-color: #dde8fc;
-          }
-
-          & .cell {
-            padding: 5px;
-            word-break: break-all;
+          & .row {
+            &:nth-child(even) {
+              background-color: var(--lighterBlue);
+            }
+            &:hover {
+              background-color: var(--lightBlue);
+            }
           }
         }
-      }
 
-      .list {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
+        .table {
+          & .header,
+          .row {
+            display: grid;
+            grid-template-columns: repeat(9, minmax(50px, 1fr));
+            grid-template-rows: min-content;
+            border-bottom: 1px solid black;
 
-        & .header,
-        .body {
-          display: inline-flex;
-          gap: 6px;
+            & .cell {
+              padding: 5px;
+              word-break: break-all;
+            }
+          }
         }
-      }
-    `;
+
+        .list {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+
+          & .header,
+          .row {
+            display: inline-flex;
+            padding: 6px;
+            column-gap: 6px;
+          }
+
+          .body {
+            display: flex;
+            flex-direction: column;
+          }
+        }
+      `,
+    ];
   }
 
   static get properties() {
@@ -96,11 +116,11 @@ export class EmployeeRecords extends LoadingEmptyMixin(LitElement) {
 
   renderBody() {
     return html`
-      <div @click=${this.handleEmployeeClick}>
+      <div @click=${this.handleEmployeeClick} class="body">
         ${this.paginationController.paginatedItems.map(
           (employee) =>
             html`
-              <div data-email=${employee.email} class="body">
+              <div data-email=${employee.email} class="row">
                 ${Object.values(employee).map(
                   (value) => html`<div class="cell">${value}</div>`
                 )}
@@ -116,6 +136,7 @@ export class EmployeeRecords extends LoadingEmptyMixin(LitElement) {
 
   renderEmployeeRecords() {
     const classes = {
+      wrapper: true,
       list: this.display,
       table: !this.display,
     };
@@ -134,7 +155,7 @@ export class EmployeeRecords extends LoadingEmptyMixin(LitElement) {
   render() {
     return html` <h2>Employees</h2>
       <search-input></search-input>
-      <button @click=${this.handleDisplay}>
+      <button @click=${this.handleDisplay} class="primary">
         Display ${this.display ? 'table' : 'list'}
       </button>
       ${this.renderWithLoadingEmpty(

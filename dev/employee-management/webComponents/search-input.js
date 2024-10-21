@@ -5,10 +5,17 @@ import {searchTerm} from '../store/reducers';
 export class SearchInput extends LitElement {
   static get styles() {
     return css`
+      div {
+        display: flex;
+        justify-content: center;
+      }
       input {
-        width: 100%;
+        box-sizing: border-box;
         padding: 0.5rem;
-        margin-bottom: 1rem;
+        width: 100%;
+        max-width: 260px;
+        font-size: 1rem;
+        color: var(--primary-text-color);
       }
     `;
   }
@@ -28,7 +35,13 @@ export class SearchInput extends LitElement {
 
   render() {
     return html`
-      <input @input="${this.handleChange}" value="${store.getState().search}" />
+      <div>
+        <input
+          @input="${this.handleChange}"
+          value="${store.getState().search}"
+          placeholder="Type to search"
+        />
+      </div>
     `;
   }
 }
