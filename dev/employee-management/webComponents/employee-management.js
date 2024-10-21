@@ -12,8 +12,8 @@ export class EmployeeManagement extends LitElement {
   render() {
     return html`
       <h1>Employee Management</h1>
-      <search-input></search-input>
-      <employee-records></employee-records>
+      <navigation-c></navigation-c>
+      <slot></slot>
     `;
   }
 }

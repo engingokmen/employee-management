@@ -87,11 +87,11 @@ export class EmployeeRecords extends LoadingEmptyMixin(LitElement) {
   }
 
   render() {
-    return this.renderWithLoadingEmpty(
-      this.employees.isLoading,
-      this.isEmptyData,
-      () => this.renderEmployeeRecords()
-    );
+    return html`<search-input></search-input> ${this.renderWithLoadingEmpty(
+        this.employees.isLoading,
+        this.isEmptyData,
+        () => this.renderEmployeeRecords()
+      )}`;
   }
 }
 

@@ -2,8 +2,9 @@ import {EmployeeManagement} from './webComponents/employee-management';
 import {EmployeeRecords} from './webComponents/employee-records';
 import {AddEditEmployee} from './webComponents/add-edit-employee';
 import {DeleteEmployee} from './webComponents/delete-employee';
-import {Pagination} from './webComponents/pagination';
+import {Pagination} from './webComponents/pagination-c';
 import {SearchInput} from './webComponents/search-input';
+import {Navigation} from './webComponents/navigation-c';
 import {router} from './router';
 
 export {
@@ -14,4 +15,5 @@ export {
   DeleteEmployee,
   Pagination,
   SearchInput,
+  Navigation,
 };

@@ -24,7 +24,6 @@ export class SearchInput extends LitElement {
   async handleChange(event) {
     const {value} = event.target;
     store.dispatch(searchTerm(value));
-    console.log(store.getState().search);
   }
 
   render() {
