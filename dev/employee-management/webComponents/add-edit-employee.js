@@ -137,14 +137,17 @@ export class AddEditEmployee extends LitElement {
     if (!this.result.success) {
       this.errors = this.result.error.errors;
     } else {
-      this.showDialog = true;
+      if (this.isEditPage) {
+        this.showDialog = true;
+      } else {
+        store.dispatch(addEmployee(this.result.data));
+        Router.go('/');
+      }
     }
   }
 
   confirmDialog() {
-    this.isEditPage
-      ? store.dispatch(updateEmployee(this.result.data))
-      : store.dispatch(addEmployee(this.result.data));
+    store.dispatch(updateEmployee(this.result.data));
     Router.go('/');
   }
 
