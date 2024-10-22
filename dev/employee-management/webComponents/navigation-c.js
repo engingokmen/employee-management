@@ -33,7 +33,7 @@ export class Navigation extends LitElement {
     super();
     this.linkHref = {
       employees: router.location.routes[0].path,
-      addEmployee: router.location.routes[0].children[1].path,
+      addEmployee: '/' + router.location.routes[0].children[1].path,
     };
   }
 

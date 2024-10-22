@@ -5,18 +5,46 @@ import {addEmployee, store, updateEmployee} from '../store';
 import {router} from '../router';
 import {classMap} from 'lit/directives/class-map.js';
 import {Router} from '@vaadin/router';
+import {buttonStyles} from '../styles/button-style';
 
 export class AddEditEmployee extends LitElement {
   static get styles() {
-    return css`
-      .red {
-        color: crimson;
-      }
-      .disabled {
-        background-color: #f2f2f2;
-        pointer-events: none;
-      }
-    `;
+    return [
+      buttonStyles,
+      css`
+        .wrapper {
+          display: flex;
+          justify-content: center;
+          flex-direction: column;
+          align-items: center;
+        }
+        .red {
+          color: crimson;
+        }
+        .disabled {
+          background-color: #f2f2f2;
+          pointer-events: none;
+        }
+
+        form {
+          width: 100%;
+          max-width: 460px;
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 1rem;
+
+          & label {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+          }
+
+          & button[type='submit'] {
+            grid-column-start: 2;
+          }
+        }
+      `,
+    ];
   }
 
   static get properties() {
@@ -125,11 +153,11 @@ export class AddEditEmployee extends LitElement {
 
   render() {
     return html`
-      <div>
+      <div class="wrapper">
         <h2>${this.isEditPage ? 'Edit' : 'Add'} Employee</h2>
         <form @submit="${this.onsubmit}">
           ${this.renderInputs()}
-          <input type="submit" value="Submit" />
+          <button type="submit" value="Submit" class="primary">Submit</button>
           <are-you-sure
             .show=${this.showDialog}
             @submit=${this.confirmDialog}
