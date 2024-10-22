@@ -1,4 +1,4 @@
-import {employees} from '../mockData/mockData';
+import {store} from './index';
 
 // iniitializes data from local storage
 const data = localStorage.getItem('employees');
@@ -46,10 +46,10 @@ export const fetchEmployees = (dispatch) => {
   dispatch({type: 'loading'});
   // TODO replace with local storage fetch
   const data = localStorage.getItem('employees');
-  // let employees = [];
-  // if (data && data !== 'undefined') {
-  //   employees = JSON.parse(data);
-  // }
+  let employees = [];
+  if (data && data !== 'undefined') {
+    employees = JSON.parse(data);
+  }
   dispatch({type: 'loaded', payload: employees});
 };
 
