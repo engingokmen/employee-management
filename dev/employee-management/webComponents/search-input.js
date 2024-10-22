@@ -1,6 +1,5 @@
 import {LitElement, html, css} from 'lit';
-import {store} from '../store';
-import {searchTerm} from '../store/reducers';
+import {store, searchTerm} from '../store';
 
 export class SearchInput extends LitElement {
   static get styles() {

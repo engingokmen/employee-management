@@ -42,6 +42,10 @@ export class EmployeeRecords extends LoadingEmptyMixin(LitElement) {
             & .cell {
               padding: 5px;
               word-break: break-all;
+
+              &.cell-header {
+                word-break: break-word;
+              }
             }
           }
         }
