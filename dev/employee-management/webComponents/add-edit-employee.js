@@ -6,6 +6,7 @@ import {router} from '../router';
 import {classMap} from 'lit/directives/class-map.js';
 import {Router} from '@vaadin/router';
 import {buttonStyles} from '../styles/button-style';
+import {getTranslation} from '../translation';
 
 export class AddEditEmployee extends LitElement {
   static get styles() {
@@ -102,7 +103,7 @@ export class AddEditEmployee extends LitElement {
         });
         return html`
           <label>
-            ${camelCaseToTitle(key)}:
+            ${getTranslation(key)}:
             <input
               type="${type[key]}"
               name="${key}"
@@ -154,10 +155,15 @@ export class AddEditEmployee extends LitElement {
   render() {
     return html`
       <div class="wrapper">
-        <h2>${this.isEditPage ? 'Edit' : 'Add'} Employee</h2>
+        <h2>
+          ${this.isEditPage ? getTranslation('edit') : getTranslation('add')}
+          ${getTranslation('employee')}
+        </h2>
         <form @submit="${this.onsubmit}">
           ${this.renderInputs()}
-          <button type="submit" value="Submit" class="primary">Submit</button>
+          <button type="submit" value="Submit" class="primary">
+            ${getTranslation('submit')}
+          </button>
           <are-you-sure
             .show=${this.showDialog}
             @submit=${this.confirmDialog}

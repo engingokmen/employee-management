@@ -1,4 +1,5 @@
 import {LitElement, html, css, render} from 'lit';
+import {getTranslation} from '../translation';
 
 export class AreYouSure extends LitElement {
   static get styles() {
@@ -73,9 +74,9 @@ export class AreYouSure extends LitElement {
   renderTemplate() {
     render(
       html`<dialog open>
-        <p>Are you sure to ${this.action.toUpperCase()} ?</p>
-        <button @click=${this.handleSubmit}>Ok</button>
-        <button @click=${this.handleCancel}>Cancel</button>
+        <p>${getTranslation('areYouSure')} ${this.action.toUpperCase()} ?</p>
+        <button @click=${this.handleSubmit}>${getTranslation('ok')}</button>
+        <button @click=${this.handleCancel}>${getTranslation('cancel')}</button>
       </dialog> `,
       this.dialog
     );

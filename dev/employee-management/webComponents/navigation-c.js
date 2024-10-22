@@ -1,5 +1,6 @@
 import {LitElement, html, css} from 'lit';
 import {router} from '../router';
+import {getTranslation} from '../translation';
 
 export class Navigation extends LitElement {
   static get styles() {
@@ -42,10 +43,14 @@ export class Navigation extends LitElement {
       <nav>
         <ul>
           <li>
-            <a href=${this.linkHref.employees}>Employees</a>
+            <a href=${this.linkHref.employees}
+              >${getTranslation('employees')}</a
+            >
           </li>
           <li>
-            <a href=${this.linkHref.addEmployee}>Add Employee</a>
+            <a href=${this.linkHref.addEmployee}
+              >${getTranslation('addEmployee')}</a
+            >
           </li>
         </ul>
       </nav>

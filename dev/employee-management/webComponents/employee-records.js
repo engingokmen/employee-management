@@ -7,6 +7,7 @@ import {AsyncDataController} from '../controllers/AsyncDataController';
 import {PaginationController} from '../controllers/PaginationController';
 import {Router} from '@vaadin/router';
 import {buttonStyles} from '../styles/button-style';
+import {getTranslation} from '../translation';
 
 export class EmployeeRecords extends LoadingEmptyMixin(LitElement) {
   static get styles() {
@@ -112,7 +113,7 @@ export class EmployeeRecords extends LoadingEmptyMixin(LitElement) {
       <div class="header">
         ${Object.keys(this.paginationController.paginatedItems[0]).map(
           (key) =>
-            html`<div class="cell cell-header">${camelCaseToTitle(key)}</div>`
+            html`<div class="cell cell-header">${getTranslation(key)}</div>`
         )}
       </div>
     `;
@@ -157,10 +158,11 @@ export class EmployeeRecords extends LoadingEmptyMixin(LitElement) {
   }
 
   render() {
-    return html` <h2>Employees</h2>
+    return html` <h2>${getTranslation('employees')}</h2>
       <search-input></search-input>
       <button @click=${this.handleDisplay} class="primary">
-        Display ${this.display ? 'table' : 'list'}
+        ${getTranslation('display')}
+        ${this.display ? getTranslation('table') : getTranslation('list')}
       </button>
       ${this.renderWithLoadingEmpty(
         this.employees.isLoading,

@@ -1,5 +1,6 @@
 import {LitElement, html, css} from 'lit';
 import {store, searchTerm} from '../store';
+import {getTranslation} from '../translation';
 
 export class SearchInput extends LitElement {
   static get styles() {
@@ -38,7 +39,7 @@ export class SearchInput extends LitElement {
         <input
           @input="${this.handleChange}"
           value="${store.getState().search}"
-          placeholder="Type to search"
+          placeholder=${getTranslation('typeToSearch')}
         />
       </div>
     `;

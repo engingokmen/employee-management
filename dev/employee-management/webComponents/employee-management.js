@@ -1,4 +1,5 @@
 import {LitElement, html, css} from 'lit';
+import {getTranslation} from '../translation';
 
 export class EmployeeManagement extends LitElement {
   static get styles() {
@@ -11,7 +12,7 @@ export class EmployeeManagement extends LitElement {
 
   render() {
     return html`
-      <h1>Employee Management</h1>
+      <h1>${getTranslation('employeeManagement')}</h1>
       <navigation-c></navigation-c>
       <slot></slot>
     `;

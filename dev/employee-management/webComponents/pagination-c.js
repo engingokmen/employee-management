@@ -1,4 +1,5 @@
 import {LitElement, html, css} from 'lit';
+import {getTranslation} from '../translation';
 
 export class Pagination extends LitElement {
   static get styles() {
@@ -47,14 +48,17 @@ export class Pagination extends LitElement {
           @click="${() => this.changePage(this.currentPage - 1)}"
           ?disabled="${this.currentPage === 1}"
         >
-          Previous
+          ${getTranslation('previous')}
         </button>
-        <span>Page ${this.currentPage} of ${this.totalPages}</span>
+        <span
+          >${getTranslation('page')} ${this.currentPage} ${getTranslation('of')}
+          ${this.totalPages}</span
+        >
         <button
           @click="${() => this.changePage(this.currentPage + 1)}"
           ?disabled="${this.currentPage === this.totalPages}"
         >
-          Next
+          ${getTranslation('next')}
         </button>
       </div>
     `;
